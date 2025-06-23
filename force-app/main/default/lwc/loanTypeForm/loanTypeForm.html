@@ -1,0 +1,38 @@
+<template>
+    <lightning-card title="Application Form">
+            <lightning-record-edit-form
+            object-api-name="Loan_Application__c"
+            onsuccess={handleSuccess}
+            onsubmit={handleSubmit}>
+
+            <!-- Required fields (hidden or defaulted) -->
+            <lightning-input-field field-name="Name" value="Auto Created" class="slds-hide"></lightning-input-field>
+            <lightning-input-field field-name="OwnerId" value={userId} class="slds-hide"></lightning-input-field>
+
+            <!-- Only show fields you care about -->
+            <lightning-input-field field-name="Applicant_Name__c"></lightning-input-field>
+            <lightning-input-field field-name="Email__c"></lightning-input-field>
+            <lightning-input-field field-name="PAN_Card__c"></lightning-input-field>
+            <lightning-input-field field-name="Aadhar_Card__c"></lightning-input-field>
+
+            <div class="slds-m-top_medium">
+                <lightning-button type="submit" label="Submit" variant="brand"></lightning-button>
+            </div>
+        </lightning-record-edit-form>
+        <!-- <div class="slds-p-around_medium">
+            Basic Details First
+            <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
+            <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input>  -->
+            <!-- invalid email bhi save ho rha, check on that -->
+             <!-- add length limit for PAN, Aadhar -->
+            <!-- <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
+            <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
+        </div> -->
+        <!-- <div>
+            <li>{applicantName}</li>
+            <li>Email: {applicantEmail}</li>
+            <li>PAN: {applicantPAN}</li>
+            <li>Aadhar: {applicantAadhar}</li>
+        </div> -->
+    </lightning-card>
+</template>
