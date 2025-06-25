@@ -1,0 +1,17 @@
+<template>
+    <lightning-card>
+        <template if:true={loanType}>
+            <p>Based on type of loan, details idhar aayenge!</p>
+
+            <template if:true={isHomeLoan}>
+                <p>🏠 Home Loan specific fields...</p>
+            </template>
+            <template if:true={isPersonalLoan}>
+                <p>👤 Personal Loan specific fields...</p>
+            </template>
+            <template if:true={isBusinessLoan}>
+                <p>🏢 Business Loan specific fields...</p>
+            </template>
+        </template>
+    </lightning-card>
+</template>

@@ -1,38 +1,72 @@
 <template>
     <lightning-card title="Application Form">
-            <lightning-record-edit-form
+        <div class="slds-p-around_medium">
+            Basic Details First
+            <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
+            <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input> 
+            <!-- invalid email bhi save ho rha, check on that -->
+             <!-- add length limit, validation for PAN, Aadhar -->
+            <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
+            <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
+            <!-- dont need commas in aadhar, regex? -->
+            <lightning-combobox
+                name="loanType"
+                label="Loan Type"
+                placeholder="Select Loan Type"
+                value={loanType}
+                options={loanTypeOptions}
+                onchange={handleLoanTypeChange} required>
+            </lightning-combobox>
+        </div>
+        <template if:true={loanType}>
+
+            <template if:true={isHomeLoan}>
+                <p>🏠 Home Loan specific fields...</p>
+            </template>
+            <template if:true={isPersonalLoan}>
+                <p>👤 Personal Loan specific fields...</p>
+            </template>
+            <template if:true={isBusinessLoan}>
+                <p>🏢 Business Loan specific fields...</p>
+            </template>
+        </template>
+        <lightning-button label="Submit" variant="brand" onclick={handleSubmit}></lightning-button>
+        <div>
+            <li>Name: {applicantName}</li>
+            <li>Email: {applicantEmail}</li>
+            <li>PAN: {applicantPAN}</li>
+            <li>Aadhar: {applicantAadhar}</li>
+        </div>
+    </lightning-card>
+</template>
+
+
+<!-- <lightning-record-edit-form
             object-api-name="Loan_Application__c"
             onsuccess={handleSuccess}
             onsubmit={handleSubmit}>
 
-            <!-- Required fields (hidden or defaulted) -->
             <lightning-input-field field-name="Name" value="Auto Created" class="slds-hide"></lightning-input-field>
             <lightning-input-field field-name="OwnerId" value={userId} class="slds-hide"></lightning-input-field>
 
-            <!-- Only show fields you care about -->
-            <lightning-input-field field-name="Applicant_Name__c"></lightning-input-field>
-            <lightning-input-field field-name="Email__c"></lightning-input-field>
-            <lightning-input-field field-name="PAN_Card__c"></lightning-input-field>
-            <lightning-input-field field-name="Aadhar_Card__c"></lightning-input-field>
+            <lightning-input field-name="Applicant_Name__c"></lightning-input>
+            <lightning-input field-name="Email__c"></lightning-input>
+            <lightning-input field-name="PAN_Card__c"></lightning-input>
+            <lightning-input field-name="Aadhar_Card__c"></lightning-input> Aadhar NOT SHOWING!!!
+            <lightning-input type="text" label="Aadhar (manual)" value="123456789012"></lightning-input>
 
-            <div class="slds-m-top_medium">
-                <lightning-button type="submit" label="Submit" variant="brand"></lightning-button>
-            </div>
+            <lightning-input field-name="Loan_Type__c"></lightning-input>
+
         </lightning-record-edit-form>
-        <!-- <div class="slds-p-around_medium">
-            Basic Details First
-            <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
-            <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input>  -->
-            <!-- invalid email bhi save ho rha, check on that -->
-             <!-- add length limit for PAN, Aadhar -->
-            <!-- <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
-            <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
-        </div> -->
-        <!-- <div>
-            <li>{applicantName}</li>
-            <li>Email: {applicantEmail}</li>
-            <li>PAN: {applicantPAN}</li>
-            <li>Aadhar: {applicantAadhar}</li>
-        </div> -->
-    </lightning-card>
-</template>
+
+    <lightning-card title="Test Loan Application">
+        <lightning-record-edit-form object-api-name="Loan_Application__c">
+            <lightning-input-field field-name="Applicant_Name__c"></lightning-input-field>
+            <lightning-input-field field-name="Loan_Amount__c"></lightning-input-field>
+            <lightning-button type="submit" label="Submit"></lightning-button>
+        </lightning-record-edit-form>
+    </lightning-card> -->
+
+     <!-- <lightning-card title="Test Raw Inputs">
+        <lightning-input type="text" label="Manual Test Field"></lightning-input>
+    </lightning-card> -->
