@@ -14,7 +14,7 @@ describe('c-loan-type-form', () => {
         const element = createElement('c-loan-type-form', {
             is: LoanTypeForm
         });
-
+z
         // Act
         document.body.appendChild(element);
 

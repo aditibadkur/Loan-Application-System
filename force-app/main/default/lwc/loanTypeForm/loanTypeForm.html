@@ -20,14 +20,15 @@
         </div>
         <template if:true={loanType}>
 
+            +
             <template if:true={isHomeLoan}>
-                <p>🏠 Home Loan specific fields...</p>
+                <p>Home Loan</p>
             </template>
             <template if:true={isPersonalLoan}>
-                <p>👤 Personal Loan specific fields...</p>
+                <p>Personal Loan</p>
             </template>
             <template if:true={isBusinessLoan}>
-                <p>🏢 Business Loan specific fields...</p>
+                <p>Business Loan</p>
             </template>
         </template>
         <lightning-button label="Submit" variant="brand" onclick={handleSubmit}></lightning-button>
