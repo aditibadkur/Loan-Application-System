@@ -1,5 +1,40 @@
 <template>
-    <lightning-card title="Business Loan Details">
-        
+    <lightning-card title="Business Loan Details" icon-name="standard:loan">
+        <div class="slds-p-around_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasApplications}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <div class="slds-text-title">Loan Type</div>
+                        <div class="slds-text-body_regular">{loanType}</div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <div class="slds-text-title">Loan Amount</div>
+                        <div class="slds-text-body_regular">
+                            {applicationData.formattedLoanAmount}
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <div class="slds-text-title">Annual Income</div>
+                        <div class="slds-text-body_regular">
+                            {applicationData.formattedIncome}
+                        </div>
+                    </div>
+                </template>
+                
+                <template if:false={hasApplications}>
+                    <p>No loan application details found.</p>
+                </template>
+            </template>
+            
+            <template if:true={error}>
+                <p class="slds-text-color_error">Error loading application: {error}</p>
+            </template>
+        </div>
     </lightning-card>
 </template>
