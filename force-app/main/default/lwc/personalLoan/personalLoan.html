@@ -1,5 +1,5 @@
 <template>
-    <lightning-card title="Personal Loan Details" icon-name="standard:loan">
+    <lightning-card title="Home Loan Details" icon-name="standard:loan">
         <div class="slds-p-around_medium">
             <template if:true={isLoading}>
                 <lightning-spinner alternative-text="Loading"></lightning-spinner>
@@ -7,29 +7,15 @@
 
             <template if:false={isLoading}>
                 <template if:true={hasApplications}>
-                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
-                        <div class="slds-text-title">Loan Type</div>
-                        <div class="slds-text-body_regular">{loanType}</div>
-                    </div>
-                    
-                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
-                        <div class="slds-text-title">Loan Amount</div>
-                        <div class="slds-text-body_regular">
-                            {applicationData.formattedLoanAmount}
-                        </div>
-                    </div>
-                    
-                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
-                        <div class="slds-text-title">Annual Income</div>
-                        <div class="slds-text-body_regular">
-                            {applicationData.formattedIncome}
-                        </div>
-                    </div>
+                    Loan Type: {loanType} <br />
+                    Loan Amount: {applicationData.formattedLoanAmount} <br />
+                    Annual Income: {applicationData.formattedIncome}
                 </template>
                 
                 <template if:false={hasApplications}>
                     <p>No loan application details found.</p>
                 </template>
+
             </template>
             
             <template if:true={error}>
