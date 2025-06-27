@@ -1,25 +1,31 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import addNewApplicants from '@salesforce/apex/addNewApplicant.addNewApplicants';
+import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+
+import OBJECT_API from '@salesforce/schema/Loan_Applications__c';
+import TYPE_FIELD from '@salesforce/schema/Loan_Applications__c.Loan_Type__c';
+
 
 export default class LoanTypeForm extends LightningElement {
+
     
-    applicantName = '';
-    applicantEmail = '';
-    applicantPAN = '';
-    applicantAadhar = '';
-    loanType = '';
+    @track applicantName = '';
+    @track applicantEmail = '';
+    @track applicantPAN = '';
+    @track applicantAadhar = '';
 
-
+    @track loanType = '';
+    @track loanTypeOptions = [];
     @track isHomeLoan = false;
     @track isPersonalLoan = false;
     @track isBusinessLoan = false;
 
-    loanTypeOptions = [
-        { label: 'Home Loan', value: 'Home Loan' },
-        { label: 'Personal Loan', value: 'Personal Loan' },
-        { label: 'Business Loan', value: 'Business Loan' }
-    ];
+    // loanTypeOptions = [
+    //     { label: 'Home Loan', value: 'Home Loan' },
+    //     { label: 'Personal Loan', value: 'Personal Loan' },
+    //     { label: 'Business Loan', value: 'Business Loan' }
+    // ];
 
     handleChange(event) {
         const field = event.target.name;
@@ -28,18 +34,45 @@ export default class LoanTypeForm extends LightningElement {
         : event.target.value;
     }
 
+    @wire(getObjectInfo, { objectApiName: OBJECT_API })
+    objectInfo;
+
+    @wire(getPicklistValues, { recordTypeId: '$objectInfo.data.defaultRecordTypeId', fieldApiName: TYPE_FIELD })
+    wiredPicklistValues({ error, data }) {
+        if (data) {
+            this.loanTypeOptions = data.values.map(item => ({
+                label: item.label,
+                value: item.value
+            }));
+            console.log('Picklist options loaded:', this.loanTypeOptions);
+        } else if (error) {
+            console.error('Error loading picklist values:', error);
+            this.showToast('Error', 'Failed to load loan types', 'error');
+        }
+    }
+
     handleLoanTypeChange(event) {
         try {
             this.loanType = event.detail.value;
             this.isHomeLoan = this.loanType === 'Home Loan';
             this.isPersonalLoan = this.loanType === 'Personal Loan';
             this.isBusinessLoan = this.loanType === 'Business Loan';
+            
+            console.log('Selected loan type:', this.loanType);
+            console.log('isHomeLoan:', this.isHomeLoan);
+            console.log('isPersonalLoan:', this.isPersonalLoan);
+            console.log('isBusinessLoan:', this.isBusinessLoan);
         } catch (e) {
             console.error('Combobox error:', e);
         }
     }
 
     handleSubmit() {
+        if (!this.applicantEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            this.showToast('Error', 'Invalid email format', 'error');
+            return;
+        }
+
         if (!this.applicantPAN.match(/^[A-Z0-9]{10}$/)) {
             this.showToast('Error', 'PAN must be 10 characters (A-Z, 0-9)', 'error');
             return;
@@ -47,11 +80,6 @@ export default class LoanTypeForm extends LightningElement {
 
         if (!this.applicantAadhar.match(/^\d{12}$/)) {
             this.showToast('Error', 'Aadhar must be 12 digits', 'error');
-            return;
-        }
-
-        if (!this.applicantEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            this.showToast('Error', 'Invalid email format', 'error');
             return;
         }
 
@@ -75,7 +103,7 @@ export default class LoanTypeForm extends LightningElement {
         })
         .catch(error => {
             this.showToast('Error', error.body.message, 'error');
-            console.log("Adi error: "+error.body.message);
+            console.log("error: "+error.body.message);
         });
     }
 

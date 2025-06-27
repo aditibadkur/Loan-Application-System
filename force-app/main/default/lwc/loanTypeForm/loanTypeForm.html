@@ -4,10 +4,13 @@
         <div class="slds-p-around_medium slds-grid slds-gutters">
             <div class="slds-col slds-p-around_medium">
                 <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
+                <lightning-input type="phone" name="applicantPhone" label="Phone" onchange={handleChange} required></lightning-input>
                 <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input> 
                 <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
                 <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
                 <!-- dont need commas in aadhar, regex? -->
+                <lightning-input type="number" name="applicantAnnualIncome" label="Annual Income" onchange={handleChange} required></lightning-input>
+                <lightning-input type="number" name="applicantAmount" label="Loan Amount" onchange={handleChange} required></lightning-input>
                 
                 <lightning-combobox
                     name="loanType"
@@ -18,6 +21,8 @@
                     onchange={handleLoanTypeChange} required>
                 </lightning-combobox>
                 <!-- check why that extra line pops -->
+
+                
             </div>
             
             <!-- use css to render them right side pe, or try for sections? modals maybe? -->
