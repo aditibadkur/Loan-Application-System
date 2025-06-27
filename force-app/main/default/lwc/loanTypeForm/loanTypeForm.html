@@ -1,26 +1,35 @@
 <template>
     <lightning-card title="Loan Application Form">
 
-        <div class="slds-p-around_medium">
-            <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
-            <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input> 
-            <!-- invalid email bhi save ho rha, check on that -->
-             <!-- add length limit, validation for PAN, Aadhar -->
-            <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
-            <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
-            <!-- dont need commas in aadhar, regex? -->
+        <div class="slds-p-around_medium slds-grid slds-gutters">
+            <div class="slds-col slds-p-around_medium">
+                <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
+                <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input> 
+                <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
+                <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
+                <!-- dont need commas in aadhar, regex? -->
+                
+                <lightning-combobox
+                    name="loanType"
+                    label="Loan Type"
+                    placeholder="Select Loan Type"
+                    value={loanType}
+                    options={loanTypeOptions}
+                    onchange={handleLoanTypeChange} required>
+                </lightning-combobox>
+                <!-- check why that extra line pops -->
+            </div>
             
-            <lightning-combobox
-                name="loanType"
-                label="Loan Type"
-                placeholder="Select Loan Type"
-                value={loanType}
-                options={loanTypeOptions}
-                onchange={handleLoanTypeChange} required>
-            </lightning-combobox>
+            <!-- use css to render them right side pe, or try for sections? modals maybe? -->
+            <div class="slds-col slds-p-around_medium">
+                <c-home-loan-form message={isHomeLoan}></c-home-loan-form>
+                <c-personal-loan-form message={isPersonalLoan}></c-personal-loan-form>
+                <c-business-loan-form message={isBusinessLoan}></c-business-loan-form>
+            </div>
         </div>
 
-        <div class="slds-p-around_medium">
+        <!-- only for testing conditional rendering -->
+        <!-- <div class="slds-p-around_medium">
             <template if:true={loanType}>
                 <template if:true={isHomeLoan}>
                     <p>Home Loan</p>
@@ -32,9 +41,16 @@
                     <p>Business Loan</p>
                 </template>
             </template>
-        </div>
+        </div> -->
 
-        <lightning-button class="slds-p-around_medium" label="Submit" variant="brand" onclick={handleSubmit}></lightning-button>
+        <div class="slds-grid slds-grid_align-end">
+            <lightning-button 
+                class="slds-p-around_medium" 
+                label="Submit" 
+                variant="brand" 
+                onclick={handleSubmit}>
+            </lightning-button>
+        </div>
     </lightning-card>
 </template>
 
