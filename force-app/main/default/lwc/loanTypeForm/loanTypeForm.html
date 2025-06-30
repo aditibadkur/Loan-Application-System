@@ -8,7 +8,6 @@
                 <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input> 
                 <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
                 <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
-                <!-- dont need commas in aadhar, regex? -->
                 <lightning-input type="number" name="applicantAnnualIncome" label="Annual Income" onchange={handleChange} required></lightning-input>
                 <lightning-input type="number" name="applicantAmount" label="Loan Amount" onchange={handleChange} required></lightning-input>
                 
@@ -21,7 +20,15 @@
                     onchange={handleLoanTypeChange} required>
                 </lightning-combobox>
                 <!-- check why that extra line pops -->
-
+                 
+                <lightning-combobox
+                    name="loanDuration"
+                    label="Loan Duration"
+                    placeholder="Select Duration"
+                    value={loanDuration}
+                    options={loanDurationOptions}
+                    onchange={handleDurationChange} required>
+                </lightning-combobox>
                 
             </div>
             
