@@ -1,9 +1,17 @@
 <template>
     <template lwc:if={message}>
-        PERSONAL LOAN FORM
-        <!-- <lightning-input type="number" name="totalLoans" label="Total Loans Taken" onchange={handleChange} required></lightning-input> -->
-        
-        <!-- <lightning-file-upload
+        <lightning-card>
+            HOME LOAN FORM
+            <lightning-button 
+                    label="Submit" 
+                    variant="brand" 
+                    onclick={handleSubmit}>
+            </lightning-button>
+        </lightning-card>
+    </template>
+</template>
+
+<!-- <lightning-file-upload
             label="Utility Bill  (Electricity,Gas,Water,etc...Any ONE)"
             name="fileUploader"
             accept={acceptedFormats}
@@ -11,6 +19,3 @@
             onuploadfinished={handleUploadFinished}
         > 
         </lightning-file-upload> -->
-
-    </template>
-</template>

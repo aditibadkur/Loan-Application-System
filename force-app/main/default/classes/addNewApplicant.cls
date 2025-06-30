@@ -1,6 +1,6 @@
 public with sharing class addNewApplicant {
     @AuraEnabled
-    public static void addNewApplicants(
+    public static Id addNewApplicants(
         String applicantName, 
         String applicantEmail, 
         String applicantPAN, 
@@ -28,5 +28,6 @@ public with sharing class addNewApplicant {
         appl.Credit_Score__c = '700-749'; // Example credit score range
 
         insert appl;
+        return appl.Id;
     }
 }

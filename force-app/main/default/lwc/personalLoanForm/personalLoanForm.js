@@ -16,32 +16,47 @@ export default class PersonalLoanForm extends LightningElement {
         alert('No. of files uploaded : ' + uploadedFiles.length);
     }
 
-    // handleChange(event) {
-    //     const field = event.target.name;
-    //     this[field] = event.target.type === 'number' 
-    //     ? event.target.value.toString() // Convert number to string
-    //     : event.target.value;
-    // }
+    handleChange(event) {
+        const field = event.target.name;
+        this[field] = event.target.type === 'number' 
+        ? event.target.value.toString() // Convert number to string
+        : event.target.value;
+    }
 
-    // handleSubmit() {
-    //     addNewApplicants({
-    //         totalLoans: this.totalLoans
-    //     })
-    //     .then(result => {
-    //         this.showToast('Success', 'Application submitted!', 'success');
-    //         this.clearFields();
-    //     })
-    //     .catch(error => {
-    //         this.showToast('Error', error.body.message, 'error');
-    //         console.log("error: " + error.body.message);
-    //     });
-    // }
+    handleSubmit() {
+        this.clearFields();
+        // addNewApplicants({
+        //     totalLoans: this.totalLoans
+        // })
+        // .then(result => {
+        //     this.showToast('Success', 'Application submitted!', 'success');
+        //     this.clearFields();
+        // })
+        // .catch(error => {
+        //     this.showToast('Error', error.body.message, 'error');
+        //     console.log("error: " + error.body.message);
+        // });
+    }
 
     // clearFields() {
     //     this.totalLoans = '';
     // }
 
-    // showToast(title, message, variant) {
-    //         this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
-    // }
+    clearFields() {
+        this.applicantName = '';
+        this.applicantEmail = '';
+        this.applicantPAN = '';
+        this.applicantAadhar = '';
+        this.loanType = '';
+        this.applicantPhone = '';
+        this.applicantAnnualIncome = '';
+        this.applicantAmount = '';
+        this.isHomeLoan = false;
+        this.isPersonalLoan = false;
+        this.isBusinessLoan = false;
+    }
+
+    showToast(title, message, variant) {
+            this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+    }
 }

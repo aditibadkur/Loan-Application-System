@@ -1,69 +1,97 @@
 <template>
-    <lightning-card title="Loan Application Form">
+    <lightning-card title="Loan Application Form" class="slds-align_absolute-center">
+        <div class="slds-grid slds-wrap slds-grid_align-center">
+            <!-- First Row -->
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-combobox
+                    name="totalLoans"
+                    label="Pending Loans"   
+                    placeholder="Select Pending Loans"
+                    value={totalLoans}
+                    options={pendingLoansOptions}
+                    onchange={handlePendingLoansChange} 
+                    disabled={formDisabled} required>
+                </lightning-combobox>
+            </div>
 
-        <div class="slds-p-around_medium slds-grid slds-gutters">
-            <div class="slds-col slds-p-around_medium">
-                <lightning-input type="text" name="applicantName" label="Applicant Name" onchange={handleChange} required></lightning-input>
-                <lightning-input type="phone" name="applicantPhone" label="Phone" onchange={handleChange} required></lightning-input>
-                <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} required></lightning-input> 
-                <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} required></lightning-input>
-                <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} required></lightning-input>
-                <lightning-input type="number" name="applicantAnnualIncome" label="Annual Income" onchange={handleChange} required></lightning-input>
-                <lightning-input type="number" name="applicantAmount" label="Loan Amount" onchange={handleChange} required></lightning-input>
-                
+            <!-- Second Row -->
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="email" name="applicantEmail" label="Email" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="phone" name="applicantPhone" label="Phone" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>
+
+            <!-- Third Row -->
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="number" name="applicantAadhar" label="Aadhar" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="text" name="applicantPAN" label="PAN Card" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>    
+            
+            <!-- Fourth Row -->
+             <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="number" name="applicantAnnualIncome" label="Annual Income" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
                 <lightning-combobox
                     name="loanType"
                     label="Loan Type"
                     placeholder="Select Loan Type"
                     value={loanType}
                     options={loanTypeOptions}
-                    onchange={handleLoanTypeChange} required>
+                    onchange={handleLoanTypeChange} 
+                    disabled={formDisabled} required>
                 </lightning-combobox>
-                <!-- check why that extra line pops -->
-                 
+            </div>
+
+            <!-- Fifth Row -->
+            
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                <lightning-input type="number" name="applicantAmount" label="Loan Amount" onchange={handleChange} disabled={formDisabled} required></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-around_small">
                 <lightning-combobox
                     name="loanDuration"
                     label="Loan Duration"
                     placeholder="Select Duration"
                     value={loanDuration}
                     options={loanDurationOptions}
-                    onchange={handleDurationChange} required>
+                    onchange={handleDurationChange} 
+                    disabled={formDisabled} required>
                 </lightning-combobox>
-                
             </div>
-            
-            <!-- use css to render them right side pe, or try for sections? modals maybe? -->
-            <div class="slds-col slds-p-around_medium">
-                <c-home-loan-form message={isHomeLoan}></c-home-loan-form>
-                <c-personal-loan-form message={isPersonalLoan}></c-personal-loan-form>
-                <c-business-loan-form message={isBusinessLoan}></c-business-loan-form>
-            </div>
+
         </div>
 
-        <!-- only for testing conditional rendering -->
-        <!-- <div class="slds-p-around_medium">
-            <template if:true={loanType}>
-                <template if:true={isHomeLoan}>
-                    <p>Home Loan</p>
-                </template>
-                <template if:true={isPersonalLoan}>
-                    <p>Personal Loan</p>
-                </template>
-                <template if:true={isBusinessLoan}>
-                    <p>Business Loan</p>
-                </template>
-            </template>
+        <!-- havent figured out the recordID wala part -->
+        <!-- <div class="slds-grid slds-grid_align-center slds-m-top_medium">
+            <lightning-button 
+                label="Back" 
+                variant="brand" 
+                onclick={handleBack}>   
+            </lightning-button>
         </div> -->
 
-        <div class="slds-grid slds-grid_align-end">
+        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
             <lightning-button 
-                class="slds-p-around_medium" 
-                label="Submit" 
+                label="Next" 
                 variant="brand" 
-                onclick={handleSubmit}>
+                onclick={handleNext}>
             </lightning-button>
+        </div>
+
+
+        <div class="slds-grid slds-wrap slds-grid_align-center">
+            <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                <c-home-loan-form message={showHomeLoanForm}></c-home-loan-form>
+                <c-personal-loan-form message={showPersonalLoanForm}></c-personal-loan-form>
+                <c-business-loan-form message={showBusinessLoanForm}></c-business-loan-form>
+            </div>
         </div>
     </lightning-card>
 </template>
-
-

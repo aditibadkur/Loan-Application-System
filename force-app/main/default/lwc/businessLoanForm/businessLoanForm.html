@@ -1,5 +1,12 @@
 <template>
     <template lwc:if={message}>
-        BUSINESS LOAN FORM
+        <lightning-card>
+            HOME LOAN FORM
+            <lightning-button 
+                    label="Submit" 
+                    variant="brand" 
+                    onclick={handleSubmit}>
+            </lightning-button>
+        </lightning-card>
     </template>
 </template>
