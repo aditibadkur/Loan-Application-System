@@ -1,11 +1,20 @@
 <template>
     <template lwc:if={message}>
         <lightning-card>
-            HOME LOAN FORM
+            HOME LOAN FORM  
+            <lightning-combobox
+            name = "creditScore"
+            label = "Credit Score"
+            placeholder = "Select Credit Score"
+            value = {creditScore}
+            options = {creditScoreOptions}
+            onchange = {handleCreditScoreChange}
+            disabled={formDisabled} required>
+            </lightning-combobox>
             <lightning-button 
-                    label="Submit" 
-                    variant="brand" 
-                    onclick={handleSubmit}>
+                label="Submit" 
+                variant="brand" 
+                onclick={handleSubmit}>
             </lightning-button>
         </lightning-card>
     </template>

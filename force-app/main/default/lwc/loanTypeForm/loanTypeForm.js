@@ -11,7 +11,7 @@ import TOTAL_LOANS_FIELD from '@salesforce/schema/Loan_Applications__c.Total_Loa
 
 export default class LoanTypeForm extends LightningElement {
 
-    // @track recordId; // this is giving the current record Id not checking ki previous wala hai ya nhi
+    @track recordId; // this is giving the current record Id not checking ki previous wala hai ya nhi
 
     @track applicantName = '';
     @track applicantEmail = '';
@@ -143,74 +143,52 @@ export default class LoanTypeForm extends LightningElement {
             return;
         }
 
-        this.isNext = true;
-        this.formDisabled = true;
+        const requiredFields = {
+            applicantName: 'Name',
+            applicantEmail: 'Email',
+            applicantPAN: 'PAN',
+            applicantAadhar: 'Aadhar',
+            loanType: 'Loan Type',
+            applicantPhone: 'Phone',
+            applicantAnnualIncome: 'Annual Income',
+            applicantAmount: 'Loan Amount',
+            loanDuration: 'Loan Duration',
+            totalLoans: 'Pending Loans'
+        };
 
-        // if(this.recordId){ // yeh logic nhi chal rha
-        //     // Update the existing record instead of creating a new one
-        //     addNewApplicants({
-        //         applicantName: this.applicantName,
-        //         applicantEmail: this.applicantEmail,
-        //         applicantPAN: this.applicantPAN,
-        //         applicantAadhar: this.applicantAadhar,
-        //         loanType: this.loanType,
-        //         applicantPhone: this.applicantPhone, 
-        //         applicantAnnualIncome: this.applicantAnnualIncome,
-        //         applicantAmount: this.applicantAmount,
-        //         loanDuration: this.loanDuration, 
-        //     })
-        //     .then(result => {
-        //         this.showToast('Success', 'Record Updated!', 'success');
-        //         console.log('Updating:', {
-        //             name: this.applicantName,
-        //             email: this.applicantEmail,
-        //             pan: this.applicantPAN,
-        //             aadhar: this.applicantAadhar,
-        //             loanType: this.loanType,
-        //             phone: this.applicantPhone
-        //         });
-        //     })
-        //     .catch(error => {
-        //         this.showToast('Record not updated', error.body.message, 'error');
-        //         console.log("error: "+error.body.message);
-        //     });
-        // }
-        // else{
-            addNewApplicants({
-                applicantName: this.applicantName,
-                applicantEmail: this.applicantEmail,
-                applicantPAN: this.applicantPAN,
-                applicantAadhar: this.applicantAadhar,
-                loanType: this.loanType,
-                applicantPhone: this.applicantPhone, 
-                applicantAnnualIncome: this.applicantAnnualIncome,
-                applicantAmount: this.applicantAmount,
-                loanDuration: this.loanDuration, 
-                totalLoans: this.totalLoans,
-            })
-            .then(result => {
-                this.showToast('Success', 'Record Created!', 'success');
-                // this.showToast('Success', 'Record Created! Id: ' + this.recordId, 'success');
-                console.log('Submitting:', {
-                    name: this.applicantName,
-                    email: this.applicantEmail,
-                    pan: this.applicantPAN,
-                    aadhar: this.applicantAadhar,
-                    loanType: this.loanType,
-                    phone: this.applicantPhone,
-                    annualIncome: this.applicantAnnualIncome,
-                    amount: this.applicantAmount,
-                    loanDuration: this.loanDuration,
-                    totalLoans: this.totalLoans
-                });
-            })
-            .catch(error => {
-                this.showToast('Error', error.body.message, 'error');
-                console.log("error: "+error.body.message);
-            });
+        for (const [field, label] of Object.entries(requiredFields)) {
+            if (!this[field]) {
+                this.showToast('Error', `${label} is required`, 'error');
+                return;
+            }
         }
 
-    // }
+        this.formDisabled = true;
+
+        addNewApplicants({
+            applicantName: this.applicantName,
+            applicantEmail: this.applicantEmail,
+            applicantPAN: this.applicantPAN,
+            applicantAadhar: this.applicantAadhar,
+            loanType: this.loanType,
+            applicantPhone: this.applicantPhone, 
+            applicantAnnualIncome: this.applicantAnnualIncome,
+            applicantAmount: this.applicantAmount,
+            loanDuration: this.loanDuration, 
+            totalLoans: this.totalLoans
+        })
+        .then(result => {
+            this.showToast('Success', 'Record created successfully!', 'success');
+            this.isNext = true;
+            console.log('Record created with ID:', result);
+        })
+        .catch(error => {
+            this.formDisabled = false;
+            const errorMessage = error.message || error.body?.message || 'Unknown error';
+            this.showToast('Error', errorMessage, 'error');
+            console.error('Full error:', error);
+        });
+    }
 
     get showHomeLoanForm() {
         return this.isHomeLoan && this.isNext;
@@ -224,13 +202,13 @@ export default class LoanTypeForm extends LightningElement {
         return this.isBusinessLoan && this.isNext;  
     }
 
-    handleBack() { 
-        this.isNext = false;
-        this.formDisabled = false;
-        this.showToast('Info', 'You can edit your details now', 'info');
-        // getRecordID so that update usme hi ho direct no extra/duplicate record formed
-        this.clearFields();
-    }
+    // handleBack() { 
+    //     this.isNext = false;
+    //     this.formDisabled = false;
+    //     this.showToast('Info', 'You can edit your details now', 'info');
+    //     // getRecordID so that update usme hi ho direct no extra/duplicate record formed
+    //     this.clearFields();
+    // }
 
     clearFields() {
         this.applicantName = '';
