@@ -1,65 +1,57 @@
 import { api, LightningElement, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import updateHomeLoanRecord from '@salesforce/apex/updateCreatedRecord.updateHomeLoanRecord';
 import OBJECT_API from '@salesforce/schema/Loan_Applications__c';
 import CREDIT_SCORE_FIELD from '@salesforce/schema/Loan_Applications__c.Credit_Score__c';
 
 export default class HomeLoanForm extends LightningElement {
     @api message;
+    @api recordId; 
     @track formDisabled = false; 
 
+    @track creditScore = '';
+    @track creditScoreOptions = [];
+
     @wire(getObjectInfo, { objectApiName: OBJECT_API })
-        objectInfo;
+    objectInfo;
     
-    @wire(getPicklistValues, { recordTypeId: '$objectInfo.data.defaultRecordTypeId', fieldApiName: CREDIT_SCORE_FIELD })
+    @wire(getPicklistValues, {recordTypeId: '$objectInfo.data.defaultRecordTypeId', fieldApiName: CREDIT_SCORE_FIELD })
     wiredPicklistValues({ error, data }) {
         if (data) {
             this.creditScoreOptions = data.values.map(item => ({
                 label: item.label,
                 value: item.value
             }));
-            console.log('Picklist options loaded:', this.creditScoreOptions);
         } else if (error) {
-            console.error('Error loading picklist values:', error);
-            this.showToast('Error', 'Failed to load loan types', 'error');
+            this.showToast('Error', 'Failed to load credit score options', 'error');
         }
     }
 
-    handleCreditScoreChange(event){
-        try {
-            this.creditScore = event.detail.value;  
-            console.log('Selected credit score:', this.creditScore);
-        } catch (e) {
-            console.error('Error in handleCreditScoreChange:', e);
-            this.showToast('Error', 'Failed to update credit score', 'error');
-        }
+    handleCreditScoreChange(event) {
+        this.creditScore = event.detail.value;  
     }
-
-    // handleChange(event) {
-    //     const field = event.target.name;
-    //     this[field] = event.target.value;
-    // }
 
     handleSubmit() {
-        this.formDisabled = true;
-        const data = {
-            creditScore: this.creditScore
-        };
+        if (!this.creditScore) {
+            this.showToast('Error', 'Credit Score is required', 'error');
+            return;
+        }
 
-        updateCreatedRecords({ 
+        this.formDisabled = true;
+
+        updateHomeLoanRecord({ 
             recordId: this.recordId, 
-            jsonData: JSON.stringify(data) 
+            creditScore: this.creditScore
         })
         .then(() => {
-            this.showToast('Success', 'Record updated!', 'success');
+            this.showToast('Success', 'Record updated successfully!', 'success');
         })
         .catch(error => {
-            this.showToast('Error', error.body.message, 'error');
+            this.formDisabled = false;
+            const errorMessage = error.body?.message || error.message || 'Unknown error';
+            this.showToast('Error', errorMessage, 'error');
         });
-    }
-
-    clearFields() {
-        this.formDisabled = false;
     }
 
     showToast(title, message, variant) {

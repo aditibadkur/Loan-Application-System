@@ -178,6 +178,7 @@ export default class LoanTypeForm extends LightningElement {
             totalLoans: this.totalLoans
         })
         .then(result => {
+            this.recordId = result; 
             this.showToast('Success', 'Record created successfully!', 'success');
             this.isNext = true;
             console.log('Record created with ID:', result);
