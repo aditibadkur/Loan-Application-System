@@ -9,12 +9,6 @@ export default class ShowFile extends LightningElement {
     @track error;
     _lastRecordIdFetched;
 
-    formattedSize(size) { // not working
-        if (size < 1024) return size + ' B';
-        if (size < 1048576) return Math.round(size / 1024) + ' KB';
-        return Math.round(size / 1048576 * 10) / 10 + ' MB';
-    }
-
     renderedCallback() {
         if (this.recordId && this.recordId !== this._lastRecordIdFetched) {
             this.getFiles();
@@ -22,11 +16,15 @@ export default class ShowFile extends LightningElement {
         }
     }
 
-    @api // on refresh call hota from parent, hence api is needed
+    @api // on every upload call hota from parent, hence api is needed (so that all files are fetched)
     getFiles() { 
         fetchFiles({ recordId: this.recordId })
             .then(result => {
-                this.files = result;
+                // isse size aane lag gaya!!!!! (since method directly call nhi hota, toh add as property to each file)
+                this.files = result.map(file => ({
+                    ...file,
+                    formattedSize: this.formattedSize(file.ContentDocument.ContentSize)
+                }));
                 this.error = undefined;
                 if (!result || result.length === 0) {
                     this.isFileLoaded = false;
@@ -46,7 +44,13 @@ export default class ShowFile extends LightningElement {
     handleViewFile(event) {
         const contentDocumentId = event.currentTarget.dataset.id;
         // Salesforce standard file viewer URL
-        window.open(`/sfc/servlet.shepherd/document/download/${contentDocumentId}`, '_blank');
+        window.open(`/sfc/servlet.shepherd/document/preview/${contentDocumentId}`, '_self');
+    }
+
+    formattedSize(size) {
+        if (size < 1024) return size + ' B';
+        if (size < 1048576) return Math.round(size / 102.4) / 10 + ' KB';
+        return Math.round(size / 104857.6) / 10 + ' MB';
     }
 
     showToast(title, message, variant) {
