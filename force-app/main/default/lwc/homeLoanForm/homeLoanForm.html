@@ -1,22 +1,49 @@
 <template>
-    <template lwc:if={message}>
-        <lightning-card>
-            HOME LOAN FORM  
-            <lightning-combobox
-            name = "creditScore"
-            label = "Credit Score"
-            placeholder = "Select Credit Score"
-            value = {creditScore}
-            options = {creditScoreOptions}
-            onchange = {handleCreditScoreChange}
-            disabled={formDisabled} required>
-            </lightning-combobox>
-            
-            <lightning-button 
-                label="Submit" 
-                variant="brand" 
-                onclick={handleSubmit}>
-            </lightning-button>
+    <template if:true={message}>
+        <lightning-card title="Home Loan Form" class="slds-p-around_medium">
+            <div class="slds-grid slds-wrap slds-grid_align-center">
+
+                <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                    <lightning-combobox
+                        name="creditScore"
+                        label="Credit Score"
+                        placeholder="Select Credit Score"
+                        value={creditScore}
+                        options={creditScoreOptions}
+                        onchange={handleCreditScoreChange}
+                        disabled={formDisabled}
+                        required>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                    <lightning-file-upload
+                        label="Attach receipt"
+                        name="fileUploader"
+                        accept={acceptedFormats}
+                        record-id={recordId}
+                        onuploadfinished={handleUploadFinished}
+                    >
+                    </lightning-file-upload>
+                </div>
+
+                <!-- on upload, send recordId to child -->
+                <template if:true={showFileComponent}> 
+                    <div class="slds-col slds-size_1-of-1">
+                        <c-show-file record-id={recordId}></c-show-file>
+                    </div>
+                </template>
+
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small">
+                    <lightning-button 
+                        label="Submit" 
+                        variant="brand" 
+                        onclick={handleSubmit}
+                        disabled={formDisabled}>
+                    </lightning-button>
+                </div>
+
+            </div>
         </lightning-card>
     </template>
 </template>

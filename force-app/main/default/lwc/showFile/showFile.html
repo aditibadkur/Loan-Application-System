@@ -1,0 +1,59 @@
+<template>
+    <template if:true={isFileLoaded}>
+        <lightning-card title="Attached Files" class="slds-p-around_medium">
+            <div class="slds-table slds-table_cell-buffer slds-table_bordered">
+
+                <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" style="width: 50%">
+                                <div class="slds-truncate" title="File Name">File Name</div>
+                            </th>
+                            <th scope="col" style="width: 20%">
+                                <div class="slds-truncate" title="Type">Type</div>
+                            </th>
+                            <th scope="col" style="width: 20%">
+                                <div class="slds-truncate" title="Size">Size</div>
+                            </th>
+                            <th scope="col" style="width: 10%">
+                                <div class="slds-truncate" title="Actions">Actions</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={files} for:item="file">
+                            <tr class="slds-hint-parent" key={file.ContentDocumentId}>
+                                <td data-label="File Name">
+                                    <lightning-icon icon-name="doctype:image" size="small" title="Image"></lightning-icon>
+                                    {file.ContentDocument.Title}
+                                </td>
+                                <td data-label="Type">
+                                    <div class="slds-truncate">{file.ContentDocument.FileType}</div>
+                                </td>
+                                <td data-label="Size">
+                                    <div class="slds-truncate">{file.formattedSize}</div>
+                                </td>
+                                <td data-label="Actions">
+                                    <lightning-button-icon 
+                                        icon-name="utility:preview" 
+                                        alternative-text="View" 
+                                        title="View" 
+                                        data-id={file.ContentDocumentId}
+                                        onclick={handleViewFile}>
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+
+            </div>
+        </lightning-card>
+    </template>
+
+    <template if:false={isFileLoaded}>
+        <lightning-card title="No Files Attached" class="slds-p-around_medium">
+            <p class="slds-text-body_regular">No files have been attached to this record.</p>
+        </lightning-card>
+    </template>
+</template>

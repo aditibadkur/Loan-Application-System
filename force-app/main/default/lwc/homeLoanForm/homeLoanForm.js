@@ -13,6 +13,8 @@ export default class HomeLoanForm extends LightningElement {
     @track creditScore = '';
     @track creditScoreOptions = [];
 
+    @track showFileComponent = false;
+
     @wire(getObjectInfo, { objectApiName: OBJECT_API })
     objectInfo;
     
@@ -46,12 +48,31 @@ export default class HomeLoanForm extends LightningElement {
         })
         .then(() => {
             this.showToast('Success', 'Record updated successfully!', 'success');
+            this.refreshFileList();
         })
         .catch(error => {
             this.formDisabled = false;
             const errorMessage = error.body?.message || error.message || 'Unknown error';
             this.showToast('Error', errorMessage, 'error');
         });
+    }
+
+    get acceptedFormats() {
+        return ['.pdf'];
+    }
+
+    handleUploadFinished(event) {
+        const uploadedFiles = event.detail.files;
+        this.showToast('Success', uploadedFiles.length + ' File(s) uploaded successfully!', 'success');
+        this.showFileComponent = true;
+        this.refreshFileList();
+    }
+
+    refreshFileList() {
+        const fileComponent = this.template.querySelector('c-show-file');
+        if (fileComponent) {
+            fileComponent.getFiles();
+        }
     }
 
     showToast(title, message, variant) {

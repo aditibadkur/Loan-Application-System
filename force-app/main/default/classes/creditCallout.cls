@@ -1,7 +1,7 @@
 public with sharing class creditCallout { // kidhar bhi use nhi ho rha
     public static HttpResponse getDataCallout() {
         Http http = new Http();
-
+        // not being used kidhar bhi
         // named and external credentials ke through ho raha hai (endpoint, header, etc. are managed in Named Credential)
         HttpRequest req = new HttpRequest();
         req.setEndpoint('callout:named_credential_name/data'); 
