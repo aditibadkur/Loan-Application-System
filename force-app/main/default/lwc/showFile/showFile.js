@@ -9,6 +9,9 @@ export default class ShowFile extends LightningElement {
     @track error;
     _lastRecordIdFetched;
 
+    @track previewUrl = '';
+    @track showPreview = false;
+
     renderedCallback() {
         if (this.recordId && this.recordId !== this._lastRecordIdFetched) {
             this.getFiles();
@@ -22,7 +25,7 @@ export default class ShowFile extends LightningElement {
             .then(result => {
                 // isse size aane lag gaya!!!!! (since method directly call nhi hota, toh add as property to each file)
                 this.files = result.map(file => ({
-                    ...file,
+                    ...file, // get all deets of file
                     formattedSize: this.formattedSize(file.ContentDocument.ContentSize)
                 }));
                 this.error = undefined;
@@ -43,8 +46,11 @@ export default class ShowFile extends LightningElement {
 
     handleViewFile(event) {
         const contentDocumentId = event.currentTarget.dataset.id;
+        this.previewUrl = `/sfc/servlet.shepherd/document/download/${contentDocumentId}`;
+        this.showPreview = true;
         // Salesforce standard file viewer URL
-        window.open(`/sfc/servlet.shepherd/document/preview/${contentDocumentId}`, '_self');
+        // window.open(`/sfc/servlet.shepherd/document/preview/${contentDocumentId}`, '_self'); // not working same page preview
+        // window.open(`/sfc/servlet.shepherd/document/download/${contentDocumentId}`, '_blank'); // opens in new tab
     }
 
     formattedSize(size) {
@@ -55,5 +61,10 @@ export default class ShowFile extends LightningElement {
 
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({ title,  message, variant }));
+    }
+
+    handleClosePreview() {
+        this.showPreview = false;
+        this.previewUrl = '';
     }
 }
