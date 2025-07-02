@@ -1,0 +1,10 @@
+.container {
+    position: absolute;
+    top: 100px;        /* hard coded hai, dynamic nhi samjh rha :* */
+    left: 400px;        
+    background-color: white;
+    box-shadow: 0 2px 8px #888;
+    z-index: 10000;
+    border-radius: 8px;
+    padding: 1rem;
+}
